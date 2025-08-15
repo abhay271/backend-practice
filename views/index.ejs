@@ -229,7 +229,6 @@
         </div>
         
         <div class="content">
-            <!-- Alert Messages -->
             <% if (typeof error !== 'undefined' && error) { %>
                 <div class="alert alert-error">
                     <%= error %>
@@ -242,7 +241,6 @@
                 </div>
             <% } %>
 
-            <!-- Form Section -->
             <div class="form-section">
                 <h2>📝 Create New File</h2>
                 <form action="/bolimaga" method="post" id="fileForm">
@@ -262,7 +260,6 @@
                 </form>
             </div>
 
-            <!-- Files Section -->
             <div class="files-section">
                 <h2>📂 Your Files</h2>
                 
@@ -291,7 +288,6 @@
     </div>
 
     <script>
-        // Auto-hide alerts after 5 seconds
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
@@ -301,7 +297,6 @@
             });
         }, 5000);
 
-        // Form validation
         document.getElementById('fileForm').addEventListener('submit', function(e) {
             const url = document.getElementById('url').value.trim();
             const details = document.getElementById('details').value.trim();
@@ -313,7 +308,6 @@
             }
         });
 
-        // Auto-resize textarea
         const textarea = document.getElementById('details');
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';

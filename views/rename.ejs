@@ -182,7 +182,6 @@
         </div>
         
         <div class="content">
-            <!-- Alert Messages -->
             <% if (typeof error !== 'undefined' && error) { %>
                 <div class="alert alert-error">
                     <%= error %>
@@ -216,7 +215,6 @@
     </div>
 
     <script>
-        // Form validation
         document.getElementById('renameForm').addEventListener('submit', function(e) {
             const newName = document.getElementById('newName').value.trim();
             

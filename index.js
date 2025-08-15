@@ -8,14 +8,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
-// Ensure files directory exists
-const filesDir = path.join(__dirname, 'files');
-if (!fs.existsSync(filesDir)) {
-    fs.mkdirSync(filesDir, { recursive: true });
+const filesDirectory = path.join(__dirname, 'files');
+if (!fs.existsSync(filesDirectory)) {
+    fs.mkdirSync(filesDirectory, { recursive: true });
 }
 
 app.get('/', (req, res) => {
-    fs.readdir(filesDir, (err, files) => {
+    fs.readdir(filesDirectory, (err, files) => {
         if (err) {
             console.error('Error reading files directory:', err);
             return res.render('index', { 
@@ -25,13 +24,12 @@ app.get('/', (req, res) => {
             });
         }
         
-        // Filter out non-text files and get file contents
         const textFiles = files.filter(file => file.endsWith('.txt'));
         const fileContents = [];
         
         textFiles.forEach(file => {
             try {
-                const content = fs.readFileSync(path.join(filesDir, file), 'utf-8');
+                const content = fs.readFileSync(path.join(filesDirectory, file), 'utf-8');
                 fileContents.push({
                     name: file.replace('.txt', ''),
                     content: content
@@ -57,7 +55,7 @@ app.post('/bolimaga', (req, res) => {
     }
     
     const fileName = url.split(' ').join('') + '.txt';
-    const filePath = path.join(filesDir, fileName);
+    const filePath = path.join(filesDirectory, fileName);
     
     fs.writeFile(filePath, details, (err) => {
         if (err) {
@@ -68,10 +66,9 @@ app.post('/bolimaga', (req, res) => {
     });
 });
 
-// Route to read a specific file
 app.get('/read/:fileName', (req, res) => {
     const fileName = req.params.fileName;
-    const filePath = path.join(filesDir, fileName + '.txt');
+    const filePath = path.join(filesDirectory, fileName + '.txt');
     
     fs.readFile(filePath, 'utf-8', (err, content) => {
         if (err) {
@@ -86,10 +83,9 @@ app.get('/read/:fileName', (req, res) => {
     });
 });
 
-// Route to show rename form
 app.get('/rename/:fileName', (req, res) => {
     const fileName = req.params.fileName;
-    const filePath = path.join(filesDir, fileName + '.txt');
+    const filePath = path.join(filesDirectory, fileName + '.txt');
     
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
@@ -103,7 +99,6 @@ app.get('/rename/:fileName', (req, res) => {
     });
 });
 
-// Route to handle file renaming
 app.post('/rename/:fileName', (req, res) => {
     const oldFileName = req.params.fileName;
     const newFileName = req.body.newName;
@@ -116,16 +111,14 @@ app.post('/rename/:fileName', (req, res) => {
         return res.redirect(`/rename/${oldFileName}?error=New name must be different from current name`);
     }
     
-    const oldFilePath = path.join(filesDir, oldFileName + '.txt');
-    const newFilePath = path.join(filesDir, newFileName + '.txt');
+    const oldFilePath = path.join(filesDirectory, oldFileName + '.txt');
+    const newFilePath = path.join(filesDirectory, newFileName + '.txt');
     
-    // Check if new file already exists
     fs.access(newFilePath, fs.constants.F_OK, (err) => {
         if (!err) {
             return res.redirect(`/rename/${oldFileName}?error=File with this name already exists`);
         }
         
-        // Rename the file
         fs.rename(oldFilePath, newFilePath, (err) => {
             if (err) {
                 console.error('Error renaming file:', err);
