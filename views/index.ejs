@@ -18,7 +18,7 @@
         <div class="tasks">
             <% files.forEach((file)=>{%>
                 <div>
-                    <p><%= file %></p>
+                    <p><%= fs.readFile(./files/${file}, 'utf-8') %></p>
                 </div>
             <%})%>
         </div>
