@@ -98,9 +98,6 @@ Feel free to:
 - Submit pull requests
 - Share your customizations
 
-## 📄 License
-
-This project is open source and available under the MIT License. Feel free to use it, modify it, and share it!
 
 ---
 
